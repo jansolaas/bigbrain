@@ -6,6 +6,7 @@ class ProjectBase(BaseModel):
     code: str
     root_path: str
     description: Optional[str] = None
+    fps: Optional[float] = None
     is_active: bool = True
 
 

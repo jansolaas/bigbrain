@@ -7,6 +7,8 @@ from app.api.deps import get_db
 from app.models import Shot, Project
 from app.schemas.shot import ShotOut, ShotCreate
 
+from app.core.fps import resolve_fps_for_shot
+
 router = APIRouter(prefix="/shots", tags=["shots"])
 
 
@@ -21,6 +23,13 @@ def list_shots(
         query = query.filter(Shot.project_id == project_id)
     return query.all()
 
+@router.get("/{shot_id}", response_model=ShotOut)
+def get_shot(shot_id: int, db: Session = Depends(get_db)):
+    """Get a single shot by ID."""
+    shot = db.query(Shot).filter(Shot.id == shot_id).first()
+    if shot is None:
+        raise HTTPException(status_code=404, detail="Shot not found")
+    return shot
 
 @router.post("/", response_model=ShotOut, status_code=201)
 def create_shot(payload: ShotCreate, db: Session = Depends(get_db)):
@@ -56,3 +65,14 @@ def create_shot(payload: ShotCreate, db: Session = Depends(get_db)):
     db.refresh(shot)
 
     return shot
+
+@router.get("/{shot_id}/fps", response_model=float)
+def get_shot_fps(shot_id: int, db: Session = Depends(get_db)):
+    """
+    Get the effective fps for a shot, resolving overrides.
+    """
+    try:
+        fps = resolve_fps_for_shot(db, shot_id=shot_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    return fps

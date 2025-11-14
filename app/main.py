@@ -1,12 +1,16 @@
 from fastapi import FastAPI
-from app.database import Base, engine
+from app.database import Base, engine, SessionLocal
 from app.api.v1 import router as api_v1_router
 
 # Import models so that Base knows about them before create_all
 from app.models import Asset, Project, Shot
+from app.core.seed import seed_dev_data
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
+# Seed dev data if DB is empty
+with SessionLocal() as db:
+    seed_dev_data(db)
 
 app = FastAPI(title="BigBrain Pipeline API")
 

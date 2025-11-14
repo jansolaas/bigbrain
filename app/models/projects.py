@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean
+from sqlalchemy import Column, Integer, String, Text, Boolean, Float
 from app.database import Base
 
 
@@ -10,4 +10,5 @@ class Project(Base):
     code = Column(String, unique=True, index=True, nullable=False)  # short code, e.g. "BB01"
     description = Column(Text, nullable=True)
     root_path = Column(String, nullable=False)  # e.g. "/mnt/projects/BB01"
+    fps = Column(Float, nullable=True)
     is_active = Column(Boolean, default=True)

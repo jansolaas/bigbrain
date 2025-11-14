@@ -35,6 +35,7 @@ def create_project(payload: ProjectCreate, db: Session = Depends(get_db)):
         root_path=payload.root_path,
         description=payload.description,
         is_active=payload.is_active,
+        fps=payload.fps,
     )
 
     db.add(project)
