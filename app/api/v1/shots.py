@@ -39,6 +39,17 @@ def create_shot(payload: ShotCreate, db: Session = Depends(get_db)):
     if project is None:
         raise HTTPException(status_code=400, detail="Project does not exist")
 
+    # If sequence_id is provided, ensure it exists and belongs to the same project
+    if payload.sequence_id is not None:
+        sequence = db.query(Sequence).filter(Sequence.id == payload.sequence_id).first()
+        if sequence is None:
+            raise HTTPException(status_code=400, detail="Sequence does not exist")
+        if sequence.project_id != payload.project_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Sequence does not belong to the same project",
+            )
+
     # Optional: enforce unique shot name within project
     existing = (
         db.query(Shot)
@@ -53,8 +64,8 @@ def create_shot(payload: ShotCreate, db: Session = Depends(get_db)):
 
     shot = Shot(
         project_id=payload.project_id,
+        sequence_id=payload.sequence_id,
         name=payload.name,
-        sequence=payload.sequence,
         frame_start=payload.frame_start,
         frame_end=payload.frame_end,
         fps=payload.fps,

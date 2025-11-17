@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from app.models import Project, Shot
+from app.models import Project, Shot, Sequence
 
 
 def seed_dev_data(db: Session) -> None:
@@ -22,19 +22,29 @@ def seed_dev_data(db: Session) -> None:
     db.add(film)
     db.flush()  # get film.id without committing yet
 
+    # Sequence for film
+    film_seq = Sequence(
+        project_id=film.id,
+        episode_id=None,
+        name="SQ010",
+        description="Opening sequence",
+    )
+    db.add(film_seq)
+    db.flush()  # get film_seq.id
+
     # A couple of shots for film
     film_shot_1 = Shot(
         project_id=film.id,
+        sequence_id=film_seq.id,
         name="SQ010_SH0010",
-        sequence="SQ010",
         frame_start=1001,
         frame_end=1100,
         fps=None,  # inherit from project (24)
     )
     film_shot_2 = Shot(
         project_id=film.id,
+        sequence_id=film_seq.id,
         name="SQ010_SH0020",
-        sequence="SQ010",
         frame_start=1101,
         frame_end=1200,
         fps=12.0,  # override
@@ -54,11 +64,21 @@ def seed_dev_data(db: Session) -> None:
     db.add(episodic)
     db.flush()
 
-    # Shots could encode episode/sequence in name for now (until we add real Episode/Sequence tables)
+    # Sequence for episode 1 (we just encode episode in the name for now)
+    ep1_seq = Sequence(
+        project_id=episodic.id,
+        episode_id=None,          # we'll add real Episode wiring later
+        name="E01_SQ010",
+        description="Episode 1, sequence 10",
+    )
+    db.add(ep1_seq)
+    db.flush()
+
+    # Shot in episodic project
     ep1_shot_1 = Shot(
         project_id=episodic.id,
+        sequence_id=ep1_seq.id,
         name="E01_SQ010_SH0010",
-        sequence="E01_SQ010",
         frame_start=1001,
         frame_end=1050,
         fps=None,  # inherit 25
