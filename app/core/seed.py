@@ -1,14 +1,24 @@
 from sqlalchemy.orm import Session
-
-from app.models import Project, Shot, Sequence
+from app.models import Project, Shot, Sequence, User, Task, TaskType, TaskStatus
 
 
 def seed_dev_data(db: Session) -> None:
     """Seed some development data if the DB is empty."""
     # If there are already projects, assume we've seeded before
+
     existing_project = db.query(Project).first()
     if existing_project:
         return
+
+    # Create a default user
+    admin_user = User(username="PythonSaurus", full_name="jan", role="admin", email="jan@saurus.no", discord_id="987064689928314880")
+    supervisor_user = User(username="HoudinOsaurus", full_name="sondre", role="supervisor", email="sondre@saurus.no")
+    artist_user = User(username="whiskeySaurus", full_name="herman", role="artist", email="herman@saurus.no")
+    db.add(admin_user)
+    db.add(supervisor_user)
+    db.add(artist_user)
+    db.flush()
+
 
     # Project 1: Feature film style
     film = Project(

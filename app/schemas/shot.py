@@ -5,11 +5,11 @@ from pydantic import BaseModel, ConfigDict
 
 class ShotBase(BaseModel):
     project_id: int
-    sequence_id: Optional[int] = None
-    name: str          # e.g. "SQ010_SH0010"
+    sequence_id: int   # Required now
+    name: str
     frame_start: Optional[int] = None
     frame_end: Optional[int] = None
-    fps: Optional[float] = None     # override; if None, inherit from higher levels
+    fps: Optional[float] = None
 
 
 class ShotCreate(ShotBase):

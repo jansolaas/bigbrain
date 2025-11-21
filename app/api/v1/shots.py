@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_db
 from app.models import Shot, Project
 from app.schemas.shot import ShotOut, ShotCreate
-
+from app.models import Sequence
 from app.core.fps import resolve_fps_for_shot
 
 router = APIRouter(prefix="/shots", tags=["shots"])
@@ -31,6 +31,7 @@ def get_shot(shot_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Shot not found")
     return shot
 
+
 @router.post("/", response_model=ShotOut, status_code=201)
 def create_shot(payload: ShotCreate, db: Session = Depends(get_db)):
     """Create a new shot for a project."""
@@ -39,18 +40,18 @@ def create_shot(payload: ShotCreate, db: Session = Depends(get_db)):
     if project is None:
         raise HTTPException(status_code=400, detail="Project does not exist")
 
-    # If sequence_id is provided, ensure it exists and belongs to the same project
-    if payload.sequence_id is not None:
-        sequence = db.query(Sequence).filter(Sequence.id == payload.sequence_id).first()
-        if sequence is None:
-            raise HTTPException(status_code=400, detail="Sequence does not exist")
-        if sequence.project_id != payload.project_id:
-            raise HTTPException(
-                status_code=400,
-                detail="Sequence does not belong to the same project",
-            )
+    # Ensure sequence exists and belongs to project
+    sequence = db.query(Sequence).filter(Sequence.id == payload.sequence_id).first()
+    if sequence is None:
+        raise HTTPException(status_code=400, detail="Sequence does not exist")
 
-    # Optional: enforce unique shot name within project
+    if sequence.project_id != payload.project_id:
+        raise HTTPException(
+            status_code=400,
+            detail="Sequence does not belong to the same project",
+        )
+
+    # Enforce unique shot name
     existing = (
         db.query(Shot)
         .filter(Shot.project_id == payload.project_id, Shot.name == payload.name)
