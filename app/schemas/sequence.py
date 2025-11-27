@@ -8,7 +8,7 @@ class SequenceBase(BaseModel):
     episode_id: Optional[int] = None
     name: str
     description: Optional[str] = None
-
+    is_active: bool = True
 
 class SequenceCreate(SequenceBase):
     """Schema for creating a sequence."""

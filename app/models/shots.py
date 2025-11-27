@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean
 from app.database import Base
 
 
@@ -20,3 +20,5 @@ class Shot(Base):
 
     # Optional fps override
     fps = Column(Float, nullable=True)
+
+    is_active = Column(Boolean, default=True, index=True)

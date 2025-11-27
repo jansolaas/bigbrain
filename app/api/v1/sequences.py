@@ -12,16 +12,19 @@ router = APIRouter(prefix="/sequences", tags=["sequences"])
 
 @router.get("/", response_model=List[SequenceOut])
 def list_sequences(
-    project_id: Optional[int] = None,
-    episode_id: Optional[int] = None,
-    db: Session = Depends(get_db),
+        project_id: Optional[int] = None,
+        episode_id: Optional[int] = None,
+        active_only: bool = True,  # New default
+        db: Session = Depends(get_db),
 ):
-    """List sequences, optionally filtered."""
     query = db.query(Sequence)
-    if project_id is not None:
+    if project_id:
         query = query.filter(Sequence.project_id == project_id)
-    if episode_id is not None:
-        query = query.filter(Sequence.episode_id == episode_id)
+    # ... existing filters ...
+
+    if active_only:
+        query = query.filter(Sequence.is_active == True)
+
     return query.all()
 
 

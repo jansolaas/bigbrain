@@ -7,7 +7,7 @@ from app.schemas.project import ProjectBase, ProjectCreate, ProjectOut
 from app.schemas.shot import ShotBase, ShotCreate, ShotOut
 from app.schemas.version import VersionBase, VersionCreate, VersionOut
 from app.schemas.sequence import SequenceBase, SequenceCreate, SequenceOut
-
+from app.schemas.software import SoftwareBase, SoftwareCreate, SoftwareOut
 __all__ = [
     "UserBase", "UserCreate", "UserOut",
     "TaskBase", "TaskCreate", "TaskOut",
@@ -16,4 +16,5 @@ __all__ = [
     "ShotBase", "ShotCreate", "ShotOut",
     "VersionBase", "VersionCreate", "VersionOut",
     "SequenceBase", "SequenceCreate", "SequenceOut",
+    "SoftwareBase", "SoftwareCreate", "SoftwareOut"
 ]

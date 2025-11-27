@@ -3,7 +3,7 @@ from app.database import Base, engine, SessionLocal
 from app.api.v1 import router as api_v1_router
 
 # Import models so that Base knows about them before create_all
-from app.models import Asset, Project, Shot, Version, tasks, users
+from app.models import Asset, Project, Shot, Version, tasks, users, Sequence
 
 from app.core.seed import seed_dev_data
 

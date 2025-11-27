@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
 from app.models import Shot, Project
-from app.schemas.shot import ShotOut, ShotCreate
+from app.schemas.shot import ShotOut, ShotCreate, ShotUpdate
 from app.models import Sequence
 from app.core.fps import resolve_fps_for_shot
 
@@ -14,13 +14,21 @@ router = APIRouter(prefix="/shots", tags=["shots"])
 
 @router.get("/", response_model=List[ShotOut])
 def list_shots(
-    project_id: Optional[int] = None,
-    db: Session = Depends(get_db),
+        project_id: Optional[int] = None,
+        sequence_id: Optional[int] = None,
+        active_only: bool = True,  # New default filter
+        db: Session = Depends(get_db),
 ):
-    """List shots, optionally filtered by project_id."""
     query = db.query(Shot)
-    if project_id is not None:
+    if project_id:
         query = query.filter(Shot.project_id == project_id)
+    if sequence_id:
+        query = query.filter(Shot.sequence_id == sequence_id)
+
+    # Filter logic
+    if active_only:
+        query = query.filter(Shot.is_active == True)
+
     return query.all()
 
 @router.get("/{shot_id}", response_model=ShotOut)
@@ -88,3 +96,26 @@ def get_shot_fps(shot_id: int, db: Session = Depends(get_db)):
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     return fps
+
+
+@router.patch("/{shot_id}", response_model=ShotOut)
+def update_shot(
+        shot_id: int,
+        payload: ShotUpdate,
+        db: Session = Depends(get_db)
+):
+    """Update a shot (e.g. rename, omit, change frames)."""
+    shot = db.query(Shot).filter(Shot.id == shot_id).first()
+    if not shot:
+        raise HTTPException(status_code=404, detail="Shot not found")
+
+    # Python magic to update only the fields sent in payload
+    update_data = payload.model_dump(exclude_unset=True)
+
+    for key, value in update_data.items():
+        setattr(shot, key, value)
+
+    db.add(shot)
+    db.commit()
+    db.refresh(shot)
+    return shot

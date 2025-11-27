@@ -7,6 +7,7 @@ from app.models.sequences import Sequence
 from app.models.shots import Shot
 from app.models.tasks import Task, TaskType, TaskStatus
 from app.models.versions import Version
+from app.models.software import Software
 
 __all__ = [
     "User",
@@ -19,4 +20,5 @@ __all__ = [
     "TaskType",
     "TaskStatus",
     "Version",
+    "Software",
 ]
