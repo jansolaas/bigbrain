@@ -12,3 +12,5 @@ class Sequence(Base):
 
     name = Column(String, index=True, nullable=False)      # e.g. "SQ010"
     description = Column(Text, nullable=True)
+
+    is_active = Column(Boolean, default=True, index=True)

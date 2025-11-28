@@ -8,6 +8,8 @@ from app.models import Shot, Project
 from app.schemas.shot import ShotOut, ShotCreate, ShotUpdate
 from app.models import Sequence
 from app.core.fps import resolve_fps_for_shot
+from app.core.paths import create_shot_structure
+
 
 router = APIRouter(prefix="/shots", tags=["shots"])
 
@@ -83,6 +85,13 @@ def create_shot(payload: ShotCreate, db: Session = Depends(get_db)):
     db.add(shot)
     db.commit()
     db.refresh(shot)
+
+    try:
+        # We already fetched 'project' and 'sequence' for validation earlier in the function
+        create_shot_structure(project, sequence, shot)
+    except Exception as e:
+        # Don't fail the API call just because folders failed, but log it
+        print(f"Failed to create folders: {e}")
 
     return shot
 

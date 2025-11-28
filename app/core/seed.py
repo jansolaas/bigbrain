@@ -69,13 +69,24 @@ def seed_dev_data(db: Session) -> None:
     film = Project(
         name="Big Brain Feature",
         code="BBF",
-        root_path="/mnt/projects/BBF",
+        root_path="C:/BigBrain/projects/BBF",
         description="Feature film test project",
         fps=24.0,
         is_active=True,
         config={
             "software": {"maya": "2024.2", "nuke": "15.0v1"},
-            "env": {"OCIO": "/mnt/projects/BBF/config.ocio"}
+            "env": {"OCIO": "/mnt/projects/BBF/config.ocio"},
+
+            "templates": {
+                "sequence_root": "{project_root}/sequences/{sequence}",
+                "shot_root": "{project_root}/shots/{sequence}/{shot}",
+                "asset_root": "{project_root}/assets/{type}/{asset}"
+            },
+
+            "structure": {
+                "shot": ["work/maya", "work/nuke", "publish/caches", "publish/renders", "plates"],
+                "asset": ["work/maya", "work/zbrush", "publish/model", "publish/rig"]
+            }
         }
     )
     db.add(film)

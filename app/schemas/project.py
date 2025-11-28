@@ -25,7 +25,11 @@ class ProjectConfig(BaseModel):
     framerate: float = 24.0
 
 
-# --- Updated Project Schemas ---
+    # Where does the entity live? (e.g. "shots/{sequence}/{shot}")
+    templates: Dict[str, str] = Field(default_factory=dict)
+
+    # What subfolders to create? (e.g. ["work", "publish"])
+    structure: Dict[str, List[str]] = Field(default_factory=dict)
 
 class ProjectBase(BaseModel):
     name: str
