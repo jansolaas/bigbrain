@@ -7,6 +7,9 @@ from app.api.deps import get_db
 from app.models import Project
 from app.schemas.project import ProjectOut, ProjectCreate
 
+from app.api.deps import get_current_admin_user # Import dependency
+from app.models import User # Import model for type hint
+
 router = APIRouter(prefix="/projects", tags=["projects"])
 
 
@@ -18,8 +21,14 @@ def list_projects(db: Session = Depends(get_db)):
 
 
 @router.post("/", response_model=ProjectOut, status_code=201)
-def create_project(payload: ProjectCreate, db: Session = Depends(get_db)):
+def create_project(
+        payload: ProjectCreate,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_admin_user)):
     """Create a new project."""
+
+
+
     # Ensure name/code are unique
     existing_by_name = db.query(Project).filter(Project.name == payload.name).first()
     if existing_by_name:

@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-
+from app.core.security import get_password_hash
 from app.models import (
     Project,
     Shot,
@@ -27,6 +27,7 @@ def seed_dev_data(db: Session) -> None:
         email="admin@bigbrain.com",
         full_name="Pipeline Admin",
         role="admin",
+        hashed_password=get_password_hash("adminsaurus"),
         discord_id="admin#0001"
     )
     # Create a default user
@@ -34,6 +35,7 @@ def seed_dev_data(db: Session) -> None:
         username="PythonSaurus",
         full_name="jan",
         role="admin",
+        hashed_password=get_password_hash("autosaurus"),
         email="jan@saurus.no",
         discord_id="987064689928314880")
 
@@ -41,12 +43,14 @@ def seed_dev_data(db: Session) -> None:
         username="HoudinOsaurus",
         full_name="sondre",
         role="supervisor",
+        hashed_password=get_password_hash("sondresaurus"),
         email="sondre@saurus.no")
 
     artist_user = User(
         username="whiskeySaurus",
         full_name="herman",
         role="artist",
+        hashed_password=get_password_hash("herminator"),
         email="herman@saurus.no")
 
     db.add(admin_user)
