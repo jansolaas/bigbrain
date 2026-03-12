@@ -1,6 +1,6 @@
 # BigBrain Pipeline
 
-**BigBrain** is an in-house pipeline tool for animation studios, built with **FastAPI** and **SQLAlchemy**. It provides a complete backend API for managing projects, shots, assets, tasks, versions, and user workflows in a production environment.
+**BigBrain** is an work-in-progress pipeline tool for animation studios, built with **FastAPI** and **SQLAlchemy**. It provides a complete backend API for managing projects, shots, assets, tasks, versions, and user workflows in a production environment.
 
 ---
 
