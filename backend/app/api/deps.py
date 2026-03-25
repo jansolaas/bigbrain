@@ -1,12 +1,10 @@
-from app.database import get_db
-from typing import Generator, Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 
-from app.database import get_db
 from app.core.security import SECRET_KEY, ALGORITHM
+from app.database import get_db
 from app.models import User
 
 # This tells FastAPI where to find the token (in the "Authorization" header)

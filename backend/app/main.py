@@ -1,11 +1,10 @@
-from fastapi import FastAPI
-from app.database import Base, engine, SessionLocal
 from app.api.v1 import router as api_v1_router
-
-# Import models so that Base knows about them before create_all
-from app.models import Asset, Project, Shot, Version, tasks, users, Sequence
+from app.database import Base, engine, SessionLocal
+from fastapi import FastAPI
 
 from app.core.seed import seed_dev_data
+
+# Import models so that Base knows about them before create_all
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -22,3 +21,7 @@ app.include_router(api_v1_router, prefix="/api/v1")
 @app.get("/")
 def root():
     return {"message": "BigBrain API is running 🚀"}
+
+@app.get("/endpoint")
+async def read_endpoint():
+    return {"message": "Hello from /endpoint"}

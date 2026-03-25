@@ -1,6 +1,6 @@
 import os
-from typing import List
-from app.models import Project, Sequence, Shot, Asset
+from app.models import Project, Sequence, Shot
+
 
 def ensure_folder(path: str):
     """Safely create a folder if it doesn't exist."""

@@ -38,3 +38,26 @@ def create_software(payload: SoftwareCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(soft)
     return soft
+
+
+@router.patch("/{software_id}", response_model=SoftwareOut)
+def update_software(
+        software_id: int,
+        payload: SoftwareOut,
+        db: Session = Depends(get_db)
+):
+    """Update a shot (e.g. rename, omit, change frames)."""
+    shot = db.query(Software).filter(Software.id == software_id).first()
+    if not shot:
+        raise HTTPException(status_code=404, detail="Shot not found")
+
+    # Python magic to update only the fields sent in payload
+    update_data = payload.model_dump(exclude_unset=True)
+
+    for key, value in update_data.items():
+        setattr(shot, key, value)
+
+    db.add(shot)
+    db.commit()
+    db.refresh(shot)
+    return shot
