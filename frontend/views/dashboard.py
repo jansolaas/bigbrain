@@ -9,6 +9,9 @@ from PySide6.QtWidgets import (
     QTableWidget, QStatusBar, QAbstractItemView
 )
 
+from frontend.services.backed_service import BackendService
+
+
 
 # Import the logging configuration (this will execute the config setup)
 
@@ -16,19 +19,19 @@ from PySide6.QtWidgets import (
 logger = logging.getLogger(__name__)
 
 
-# Mock Backend Function
-def fetch_assets():
-    """
-    Fetch hierarchical assets from the backend (or a mock backend in this case).
-    Each asset can have a name, framerange, and children (sub-assets).
-    """
-    return [
-        {"name": "ap-001", "framerange": "1001.0 - 1073.0", "children": []},
-        {"name": "seq-0010", "framerange": "1050.0 - 1100.0", "children": [
-            {"name": "seq-0010-shot-01", "framerange": "1051.0 - 1060.0", "children": []},
-            {"name": "seq-0010-shot-02", "framerange": "1061.0 - 1070.0", "children": []},
-        ]},
-    ]
+# # Mock Backend Function
+# def fetch_assets():
+#     """
+#     Fetch hierarchical assets from the backend (or a mock backend in this case).
+#     Each asset can have a name, framerange, and children (sub-assets).
+#     """
+#     return [
+#         {"name": "ap-001", "framerange": "1001.0 - 1073.0", "children": []},
+#         {"name": "seq-0010", "framerange": "1050.0 - 1100.0", "children": [
+#             {"name": "seq-0010-shot-01", "framerange": "1051.0 - 1060.0", "children": []},
+#             {"name": "seq-0010-shot-02", "framerange": "1061.0 - 1070.0", "children": []},
+#         ]},
+#     ]
 
 
 class Dashboard(QMainWindow):
@@ -100,7 +103,7 @@ class Dashboard(QMainWindow):
 
         # Hierarchical List
         self.assets_tree = QTreeView()
-        asset_model = self.populate_assets_tree(fetch_assets())
+        asset_model = self.populate_assets_tree(BackendService.fetch_assets())
         self.assets_tree.setModel(asset_model)
         self.assets_tree.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.assets_tree.selectionModel().selectionChanged.connect(self.show_asset_metadata)
