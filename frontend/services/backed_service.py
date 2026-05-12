@@ -1,8 +1,8 @@
 import requests
 from os import getenv
 AUTH_TOKEN = "your_jwt_token_here"  # Replace with the user's JWT token
-BASE_URL = getenv("PORT", "8000")
-
+BACKEND_PORT = getenv("BACKEND_PORT", "9000")
+BASE_URL = f"http://127.0.0.1:{BACKEND_PORT}"
 
 class BackendService:
 

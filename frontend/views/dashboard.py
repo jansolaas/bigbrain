@@ -128,20 +128,48 @@ class Dashboard(QMainWindow):
 
     def populate_assets_tree(self, assets):
         """
-        Populate the QTreeView with data from the backend.
+        Populate the QTreeView with asset data from the backend.
+
+        Expects `assets` to be a list of dictionaries, for example:
+        {
+            "id": 1,
+            "project_id": 1,
+            "project_name": "Big Brain Feature",
+            "name": "HeroCharacter",
+            "type": "character"
+        }
         """
         model = QStandardItemModel()
+        model.setHorizontalHeaderLabels(["Assets"])
+
         root = model.invisibleRootItem()
 
         def add_items(parent, items):
             for item in items:
-                tree_item = QStandardItem(item["name"])
-                parent.appendRow(tree_item)
-                if item["children"]:
-                    add_items(tree_item, item["children"])
+                name = item.get("name", "Unnamed Asset")
+                asset_type = item.get("type")
 
-        add_items(root, assets)
-        model.setHorizontalHeaderLabels(["Assets"])
+                if asset_type:
+                    label = f"{name} ({asset_type})"
+                else:
+                    label = name
+
+                tree_item = QStandardItem(label)
+
+                # Store useful backend data on the item for later use
+                tree_item.setData(item.get("id"), Qt.UserRole)
+                tree_item.setData(item, Qt.UserRole + 1)
+
+                parent.appendRow(tree_item)
+
+                # Safe for both flat lists and nested tree-style data
+                children = item.get("children", [])
+                if children:
+                    add_items(tree_item, children)
+
+        if isinstance(assets, list):
+            add_items(root, assets)
+
         return model
 
     def show_asset_metadata(self, selected, deselected):
@@ -197,6 +225,29 @@ class Dashboard(QMainWindow):
 
         files_widget.setLayout(layout)
         return files_widget
+
+def add_items(parent, items):
+    for item in items:
+        name = item.get("name", "Unnamed")
+
+        frame_start = item.get("frame_start")
+        frame_end = item.get("frame_end")
+
+        if frame_start is not None and frame_end is not None:
+            label = f"{name} [{frame_start}-{frame_end}]"
+        else:
+            label = name
+
+        tree_item = QStandardItem(label)
+
+        tree_item.setData(item.get("id"), Qt.UserRole)
+        tree_item.setData(item, Qt.UserRole + 1)
+
+        parent.appendRow(tree_item)
+
+        children = item.get("children", [])
+        if children:
+            add_items(tree_item, children)
 
 
 if __name__ == "__main__":

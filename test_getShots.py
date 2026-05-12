@@ -8,7 +8,7 @@ from pprint import pprint
 load_dotenv()
 
 # Get the port from the environment variable, with a fallback default
-port = os.getenv("PORT", "8000")
+port = os.getenv("BACKEND_PORT", "8000")
 
 # Dynamically build the URL
 url = f"http://127.0.0.1:{port}/api/v1/shots"
