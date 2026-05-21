@@ -70,6 +70,61 @@ def seed_dev_data(db: Session) -> None:
     db.flush()
 
     # 2. Project 1: Feature film style
+    # 2. Helper functions for project seed data
+    def create_assets_for_project(project: Project, asset_specs: list[tuple[str, str]]) -> list[Asset]:
+        assets = []
+
+        for asset_name, asset_type in asset_specs:
+            asset = Asset(
+                project_id=project.id,
+                name=asset_name,
+                type=asset_type,
+                project_name=project.name,
+            )
+            db.add(asset)
+            assets.append(asset)
+
+        db.flush()
+        return assets
+
+    def create_sequences_and_shots(
+        project: Project,
+        sequence_names: list[str],
+        shots_per_sequence: int = 4,
+        shot_duration: int = 100,
+    ) -> list[Shot]:
+        shots = []
+
+        for sequence_name in sequence_names:
+            sequence = Sequence(
+                project_id=project.id,
+                episode_id=None,
+                name=sequence_name,
+                description=f"{sequence_name} sequence for {project.name}",
+            )
+            db.add(sequence)
+            db.flush()
+
+            for shot_index in range(1, shots_per_sequence + 1):
+                shot_number = shot_index * 10
+                frame_start = 1001
+                frame_end = frame_start + shot_duration - 1
+
+                shot = Shot(
+                    project_id=project.id,
+                    sequence_id=sequence.id,
+                    name=f"{sequence_name}_SH{shot_number:04d}",
+                    frame_start=frame_start,
+                    frame_end=frame_end,
+                    fps=None,
+                )
+                db.add(shot)
+                shots.append(shot)
+
+        db.flush()
+        return shots
+
+    # 3. Project 1: Feature film style
     film = Project(
         name="Big Brain Feature",
         code="BBF",
@@ -80,134 +135,147 @@ def seed_dev_data(db: Session) -> None:
         config={
             "software": {"maya": "2024.2", "nuke": "15.0v1"},
             "env": {"OCIO": "/mnt/projects/BBF/config.ocio"},
-
             "templates": {
                 "sequence_root": "{project_root}/sequences/{sequence}",
                 "shot_root": "{project_root}/shots/{sequence}/{shot}",
-                "asset_root": "{project_root}/assets/{type}/{asset}"
+                "asset_root": "{project_root}/assets/{type}/{asset}",
             },
-
             "structure": {
                 "shot": ["work/maya", "work/nuke", "publish/caches", "publish/renders", "plates"],
-                "asset": ["work/maya", "work/zbrush", "publish/model", "publish/rig"]
-            }
-        }
+                "asset": ["work/maya", "work/zbrush", "publish/model", "publish/rig"],
+            },
+        },
     )
     db.add(film)
     db.flush()
 
-    # 3. Asset for Film
-    hero_asset = Asset(
-        project_id=film.id,
-        name="Righeous",
-        type="character",
-        project_name=film.name
+    film_assets = create_assets_for_project(
+        film,
+        [
+            ("Righeous", "character"),
+            ("Evol", "character"),
+            ("CaptainMorrow", "character"),
+            ("DriftBike", "vehicle"),
+            ("SignalTower", "environment"),
+            ("AncientGate", "prop"),
+            ("ForestOutpost", "environment"),
+            ("EnergyCore", "prop"),
+        ],
     )
 
-    villain_asset = Asset(
-        project_id=film.id,
-        name="Evol",
-        type="character",
-        project_name=film.name
+    film_shots = create_sequences_and_shots(
+        film,
+        sequence_names=["SQ010", "SQ020", "SQ030"],
+        shots_per_sequence=4,
+        shot_duration=100,
     )
 
-    db.add(hero_asset)
-    db.add(villain_asset)
-
-    db.flush()
-
-    # 4. Version for Asset (v001)
+    # 4. Version for first Film asset
     hero_v1 = Version(
-        asset_id=hero_asset.id,
+        asset_id=film_assets[0].id,
         version_number=1,
-        file_path="/mnt/projects/BBF/assets/character/HeroCharacter/v001/hero.ma",
-        comment="Initial model publish"
+        file_path="/mnt/projects/BBF/assets/character/Righeous/v001/righeous.ma",
+        comment="Initial model publish",
     )
-
-    # vilain_v1 = Version(
-    #     asset_id=hero_asset.id,
-    #     version_number=1,
-    #     file_path="/mnt/projects/BBF/assets/character/HeroCharacter/v001/hero.ma",
-    #     comment="Initial model publish of villain"
-    # )
-
     db.add(hero_v1)
-    # db.add(vilain_v1)
 
-
-    # 5. Task for Asset (Modeling)
+    # 5. Task for first Film asset
     model_task = Task(
-        asset_id=hero_asset.id,
+        asset_id=film_assets[0].id,
         name="Modeling",
         task_type=TaskType.MODELING,
         status=TaskStatus.IN_PROGRESS,
         assignee_id=admin.id,
-        description="Refine facial topology"
+        description="Refine facial topology",
     )
     db.add(model_task)
 
-    # 6. Sequence for Film
-    film_seq = Sequence(
-        project_id=film.id,
-        episode_id=None,
-        name="SQ010",
-        description="Opening sequence",
-    )
-    db.add(film_seq)
-    db.flush()
-
-    # 7. Shots for Film
-    film_shot_1 = Shot(
-        project_id=film.id,
-        sequence_id=film_seq.id,
-        name="SQ010_SH0010",
-        frame_start=1001,
-        frame_end=1100,
-        fps=None,  # inherit from project (24)
-    )
-    db.add(film_shot_1)
-    db.flush()
-
-    # 8. Task for Shot (Animation)
+    # 6. Task for first Film shot
     anim_task = Task(
-        shot_id=film_shot_1.id,
+        shot_id=film_shots[0].id,
         name="Animation",
         task_type=TaskType.ANIMATION,
         status=TaskStatus.NOT_STARTED,
         assignee_id=admin.id,
-        description="Blocking pass"
+        description="Blocking pass",
     )
     db.add(anim_task)
 
-    # --- Project 2: Episodic style ---
-    episodic = Project(
-        name="Big Brain Series",
-        code="BBS",
-        root_path="/mnt/projects/BBS",
-        description="Episodic test project",
-        fps=25.0,
+    # 7. Project 2: Animation project
+    saboteur = Project(
+        name="Saboteur",
+        code="SAB",
+        root_path="C:/BigBrain/projects/SAB",
+        description="Stylized animation project",
+        fps=24.0,
         is_active=True,
+        config={
+            "software": {"maya": "2024.2", "houdini": "19.5.640", "nuke": "15.0v1"},
+            "env": {"OCIO": "/mnt/projects/SAB/config.ocio"},
+            "templates": {
+                "sequence_root": "{project_root}/sequences/{sequence}",
+                "shot_root": "{project_root}/shots/{sequence}/{shot}",
+                "asset_root": "{project_root}/assets/{type}/{asset}",
+            },
+            "structure": {
+                "shot": ["work/layout", "work/animation", "work/lighting", "publish/renders", "plates"],
+                "asset": ["work/model", "work/rig", "work/surfacing", "publish/model", "publish/rig"],
+            },
+        },
     )
-    db.add(episodic)
+    db.add(saboteur)
     db.flush()
 
-    ep1_seq = Sequence(
-        project_id=episodic.id,
-        episode_id=None,
-        name="E01_SQ010",
-        description="Episode 1, sequence 10",
+    saboteur_assets = create_assets_for_project(
+        saboteur,
+        [
+            ("Saboteur", "character"),
+            ("CommanderVale", "character"),
+            ("CourierBot", "character"),
+            ("RailSpeeder", "vehicle"),
+            ("CheckpointGate", "environment"),
+            ("ClockworkBomb", "prop"),
+            ("CityRooftops", "environment"),
+            ("ControlRoom", "environment"),
+        ],
     )
-    db.add(ep1_seq)
-    db.flush()
 
-    ep1_shot_1 = Shot(
-        project_id=episodic.id,
-        sequence_id=ep1_seq.id,
-        name="E01_SQ010_SH0010",
-        frame_start=1001,
-        frame_end=1050,
-        fps=None
+    saboteur_shots = create_sequences_and_shots(
+        saboteur,
+        sequence_names=["SQ010", "SQ020", "SQ030"],
+        shots_per_sequence=4,
+        shot_duration=100,
     )
-    db.add(ep1_shot_1)
+
+    # 8. Version for first Saboteur asset
+    saboteur_v1 = Version(
+        asset_id=saboteur_assets[0].id,
+        version_number=1,
+        file_path="/mnt/projects/SAB/assets/character/Saboteur/v001/saboteur.ma",
+        comment="Initial character model publish",
+    )
+    db.add(saboteur_v1)
+
+    # 9. Task for first Saboteur asset
+    saboteur_model_task = Task(
+        asset_id=saboteur_assets[0].id,
+        name="Modeling",
+        task_type=TaskType.MODELING,
+        status=TaskStatus.NOT_STARTED,
+        assignee_id=admin.id,
+        description="Create primary character model",
+    )
+    db.add(saboteur_model_task)
+
+    # 10. Task for first Saboteur shot
+    saboteur_anim_task = Task(
+        shot_id=saboteur_shots[0].id,
+        name="Animation",
+        task_type=TaskType.ANIMATION,
+        status=TaskStatus.NOT_STARTED,
+        assignee_id=admin.id,
+        description="Initial animation blocking",
+    )
+    db.add(saboteur_anim_task)
 
     db.commit()
