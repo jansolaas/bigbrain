@@ -15,7 +15,7 @@ import subprocess
 load_dotenv()
 
 # Get the port from the environment variable, with a fallback default
-port = os.getenv("PORT", "8000")
+port = os.getenv("BACKEND_PORT", "8000")
 
 # Run Uvicorn with the app module and dynamic port
 subprocess.run(["uvicorn", "app.main:app", "--reload", "--port", port])

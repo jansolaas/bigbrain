@@ -99,11 +99,21 @@ def seed_dev_data(db: Session) -> None:
     # 3. Asset for Film
     hero_asset = Asset(
         project_id=film.id,
-        name="HeroCharacter",
+        name="Righeous",
         type="character",
         project_name=film.name
     )
+
+    villain_asset = Asset(
+        project_id=film.id,
+        name="Evol",
+        type="character",
+        project_name=film.name
+    )
+
     db.add(hero_asset)
+    db.add(villain_asset)
+
     db.flush()
 
     # 4. Version for Asset (v001)
@@ -113,7 +123,17 @@ def seed_dev_data(db: Session) -> None:
         file_path="/mnt/projects/BBF/assets/character/HeroCharacter/v001/hero.ma",
         comment="Initial model publish"
     )
+
+    # vilain_v1 = Version(
+    #     asset_id=hero_asset.id,
+    #     version_number=1,
+    #     file_path="/mnt/projects/BBF/assets/character/HeroCharacter/v001/hero.ma",
+    #     comment="Initial model publish of villain"
+    # )
+
     db.add(hero_v1)
+    # db.add(vilain_v1)
+
 
     # 5. Task for Asset (Modeling)
     model_task = Task(
