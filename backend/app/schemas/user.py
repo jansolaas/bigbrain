@@ -12,10 +12,11 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    pass
+    password: str
 
 
 class UserOut(UserBase):
     id: int
+    discord_id: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)

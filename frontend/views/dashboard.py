@@ -57,6 +57,8 @@ class Dashboard(QMainWindow):
 
         self.load_projects()
 
+        self.apply_user_permissions()
+
     def add_menu_bar(self):
         """
         Add a basic menu bar with options (e.g., File, Edit, Help, etc.)
@@ -152,6 +154,27 @@ class Dashboard(QMainWindow):
 
         assets_widget.setLayout(layout)
         return assets_widget
+
+    def apply_user_permissions(self):
+        """
+        Update UI based on the logged-in user's role.
+        """
+        current_user = BackendService.current_user or {}
+        username = current_user.get("username", "Unknown user")
+        role = current_user.get("role", "unknown")
+
+        self.setWindowTitle(f"Pipeline GUI - {username} ({role})")
+
+        # Only admins can manage projects for now
+        is_admin = role == "admin"
+        self.manage_projects_button.setEnabled(is_admin)
+
+        if is_admin:
+            self.statusBar().showMessage(f"Logged in as {username} ({role})")
+        else:
+            self.statusBar().showMessage(
+                f"Logged in as {username} ({role}) - project management disabled"
+            )
 
     def load_projects(self):
         """

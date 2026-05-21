@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
+from app.core.security import get_password_hash
 from app.models import User
 from app.schemas.user import UserOut, UserCreate
 
@@ -20,7 +21,16 @@ def create_user(payload: UserCreate, db: Session = Depends(get_db)):
     if existing:
         raise HTTPException(status_code=400, detail="Username taken")
 
-    user = User(**payload.model_dump())
+    user = User(
+        username=payload.username,
+        email=payload.email,
+        discord_id=payload.discord_id,
+        full_name=payload.full_name,
+        role=payload.role,
+        is_active=payload.is_active,
+        hashed_password=get_password_hash(payload.password),
+    )
+
     db.add(user)
     db.commit()
     db.refresh(user)

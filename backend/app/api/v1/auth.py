@@ -3,9 +3,10 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from typing import Any
 
-from app.api.deps import get_db
+from app.api.deps import get_db, get_current_active_user
 from app.core.security import create_access_token, verify_password
 from app.models import User
+from app.schemas.user import UserOut
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -31,3 +32,13 @@ def login(
 
     access_token = create_access_token(data={"sub": user.username})
     return {"access_token": access_token, "token_type": "bearer"}
+
+@router.get("/me", response_model=UserOut)
+def read_current_user(
+        current_user: User = Depends(get_current_active_user),
+):
+    """
+    Return the currently authenticated user.
+    """
+    return current_user
+
