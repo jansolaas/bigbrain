@@ -27,8 +27,6 @@ def create_project(
         current_user: User = Depends(get_current_admin_user)):
     """Create a new project."""
 
-
-
     # Ensure name/code are unique
     existing_by_name = db.query(Project).filter(Project.name == payload.name).first()
     if existing_by_name:

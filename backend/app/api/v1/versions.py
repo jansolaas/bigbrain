@@ -47,6 +47,8 @@ def create_version(payload: VersionCreate, db: Session = Depends(get_db)):
         asset_id=payload.asset_id,
         file_path=payload.file_path,
         comment=payload.comment,
+        version_type=payload.version_type,
+        department=payload.department,
         version_number=next_version,
     )
 

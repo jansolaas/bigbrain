@@ -26,6 +26,5 @@ response = requests.get(url, headers=headers)
 
 print(f"Status Code: {response.status_code}")
 print("Response JSON:")
-print(response.json())
 
-pprint(response.json())
+pprint(response.json(), indent=4)

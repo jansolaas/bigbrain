@@ -1,7 +1,7 @@
 """Pydantic schemas for API validation"""
 from app.schemas.user import UserBase, UserCreate, UserOut
 from app.schemas.task import TaskBase, TaskCreate, TaskOut
-# ... keep existing imports ...
+from app.schemas.department import DepartmentBase, DepartmentCreate, DepartmentOut
 from app.schemas.asset import AssetBase, AssetCreate, AssetOut
 from app.schemas.project import ProjectBase, ProjectCreate, ProjectOut
 from app.schemas.shot import ShotBase, ShotCreate, ShotOut, ShotUpdate
@@ -11,6 +11,7 @@ from app.schemas.software import SoftwareBase, SoftwareCreate, SoftwareOut
 __all__ = [
     "UserBase", "UserCreate", "UserOut",
     "TaskBase", "TaskCreate", "TaskOut",
+    "DepartmentBase", "DepartmentCreate", "DepartmentOut",
     "AssetBase", "AssetCreate", "AssetOut",
     "ProjectBase", "ProjectCreate", "ProjectOut",
     "ShotBase", "ShotCreate", "ShotOut", "ShotUpdate",

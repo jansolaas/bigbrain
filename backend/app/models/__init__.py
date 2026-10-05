@@ -6,6 +6,7 @@ from app.models.episodes import Episode
 from app.models.sequences import Sequence
 from app.models.shots import Shot
 from app.models.tasks import Task, TaskType, TaskStatus
+from app.models.departments import Department, DepartmentType
 from app.models.versions import Version
 from app.models.software import Software
 
@@ -16,8 +17,8 @@ __all__ = [
     "Episode",
     "Sequence",
     "Shot",
-    "Task",
-    "TaskType",
+    "Task", "Department",
+    "TaskType", "DepartmentType",
     "TaskStatus",
     "Version",
     "Software",

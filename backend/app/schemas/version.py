@@ -3,11 +3,15 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
 
+from app.models.versions import VersionType
 
 class VersionBase(BaseModel):
     asset_id: int
     file_path: str
     comment: Optional[str] = None
+    version_type: VersionType  # or str, if more dynamic
+    department: str
+    task: str
 
 
 class VersionCreate(VersionBase):

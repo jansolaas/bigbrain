@@ -5,8 +5,8 @@ from app.models import (
     Shot,
     Sequence,
     Asset,
-    Task,
-    TaskType,
+    Task, Department,
+    TaskType, DepartmentType,
     TaskStatus,
     User,
     Version,
@@ -135,6 +135,8 @@ def seed_dev_data(db: Session) -> None:
         config={
             "software": {"maya": "2024.2", "nuke": "15.0v1"},
             "env": {"OCIO": "/mnt/projects/BBF/config.ocio"},
+            "tasks": ["Modelling, Animation, Rigging, SFX, Lighting, Compositing"],
+            "departments": ["Animation", "Compositing", "Lighting", "Modeling", "Rigging", "Editing"],
             "templates": {
                 "sequence_root": "{project_root}/sequences/{sequence}",
                 "shot_root": "{project_root}/shots/{sequence}/{shot}",
@@ -170,36 +172,47 @@ def seed_dev_data(db: Session) -> None:
         shot_duration=100,
     )
 
-    # 4. Version for first Film asset
-    hero_v1 = Version(
-        asset_id=film_assets[0].id,
-        version_number=1,
-        file_path="/mnt/projects/BBF/assets/character/Righeous/v001/righeous.ma",
-        comment="Initial model publish",
-    )
-    db.add(hero_v1)
-
-    # 5. Task for first Film asset
-    model_task = Task(
-        asset_id=film_assets[0].id,
-        name="Modeling",
-        task_type=TaskType.MODELING,
-        status=TaskStatus.IN_PROGRESS,
-        assignee_id=admin.id,
-        description="Refine facial topology",
-    )
-    db.add(model_task)
-
-    # 6. Task for first Film shot
-    anim_task = Task(
-        shot_id=film_shots[0].id,
-        name="Animation",
-        task_type=TaskType.ANIMATION,
-        status=TaskStatus.NOT_STARTED,
-        assignee_id=admin.id,
-        description="Blocking pass",
-    )
-    db.add(anim_task)
+    # # 4. Version for first Film asset
+    # hero_v1 = Version(
+    #     asset_id=film_assets[0].id,
+    #     version_number=1,
+    #     file_path="/mnt/projects/BBF/assets/character/Righeous/v001/righeous.ma",
+    #     comment="Initial model publish",
+    # )
+    # db.add(hero_v1)
+    #
+    # # 5. Task for first Film asset
+    # model_task = Task(
+    #     asset_id=film_assets[0].id,
+    #     name="Modeling",
+    #     task_type=TaskType.MODELING,
+    #     status=TaskStatus.IN_PROGRESS,
+    #     assignee_id=admin.id,
+    #     description="Refine facial topology",
+    # )
+    # db.add(model_task)
+    #
+    # # 5. Task for first Film asset
+    # model_task = Task(
+    #     asset_id=film_assets[0].id,
+    #     name="Modeling",
+    #     task_type=TaskType.MODELING,
+    #     status=TaskStatus.IN_PROGRESS,
+    #     assignee_id=admin.id,
+    #     description="Refine facial topology",
+    # )
+    # db.add(model_task)
+    #
+    # # 6. Task for first Film shot
+    # anim_task = Task(
+    #     shot_id=film_shots[0].id,
+    #     name="Animation",
+    #     task_type=TaskType.ANIMATION,
+    #     status=TaskStatus.NOT_STARTED,
+    #     assignee_id=admin.id,
+    #     description="Blocking pass",
+    # )
+    # db.add(anim_task)
 
     # 7. Project 2: Animation project
     saboteur = Project(
@@ -212,6 +225,8 @@ def seed_dev_data(db: Session) -> None:
         config={
             "software": {"maya": "2024.2", "houdini": "19.5.640", "nuke": "15.0v1"},
             "env": {"OCIO": "/mnt/projects/SAB/config.ocio"},
+            "tasks": ["Modelling, Animation, Rigging, SFX, Lighting, Compositing"],
+            "departments": ["Animation", "Compositing", "Lighting", "Modeling", "Rigging", "Editing"],
             "templates": {
                 "sequence_root": "{project_root}/sequences/{sequence}",
                 "shot_root": "{project_root}/shots/{sequence}/{shot}",
@@ -247,35 +262,35 @@ def seed_dev_data(db: Session) -> None:
         shot_duration=100,
     )
 
-    # 8. Version for first Saboteur asset
-    saboteur_v1 = Version(
-        asset_id=saboteur_assets[0].id,
-        version_number=1,
-        file_path="/mnt/projects/SAB/assets/character/Saboteur/v001/saboteur.ma",
-        comment="Initial character model publish",
-    )
-    db.add(saboteur_v1)
+    # # 8. Version for first Saboteur asset
+    # saboteur_v1 = Version(
+    #     asset_id=saboteur_assets[0].id,
+    #     version_number=1,
+    #     file_path="/mnt/projects/SAB/assets/character/Saboteur/v001/saboteur.ma",
+    #     comment="Initial character model publish",
+    # )
+    # db.add(saboteur_v1)
 
-    # 9. Task for first Saboteur asset
-    saboteur_model_task = Task(
-        asset_id=saboteur_assets[0].id,
-        name="Modeling",
-        task_type=TaskType.MODELING,
-        status=TaskStatus.NOT_STARTED,
-        assignee_id=admin.id,
-        description="Create primary character model",
-    )
-    db.add(saboteur_model_task)
-
-    # 10. Task for first Saboteur shot
-    saboteur_anim_task = Task(
-        shot_id=saboteur_shots[0].id,
-        name="Animation",
-        task_type=TaskType.ANIMATION,
-        status=TaskStatus.NOT_STARTED,
-        assignee_id=admin.id,
-        description="Initial animation blocking",
-    )
-    db.add(saboteur_anim_task)
+    # # 9. Task for first Saboteur asset
+    # saboteur_model_task = Task(
+    #     asset_id=saboteur_assets[0].id,
+    #     name="Modeling",
+    #     task_type=TaskType.MODELING,
+    #     status=TaskStatus.NOT_STARTED,
+    #     assignee_id=admin.id,
+    #     description="Create primary character model",
+    # )
+    # db.add(saboteur_model_task)
+    #
+    # # 10. Task for first Saboteur shot
+    # saboteur_anim_task = Task(
+    #     shot_id=saboteur_shots[0].id,
+    #     name="Animation",
+    #     task_type=TaskType.ANIMATION,
+    #     status=TaskStatus.NOT_STARTED,
+    #     assignee_id=admin.id,
+    #     description="Initial animation blocking",
+    # )
+    # db.add(saboteur_anim_task)
 
     db.commit()

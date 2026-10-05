@@ -21,6 +21,8 @@ class EnvConfig(BaseModel):
 class ProjectConfig(BaseModel):
     software: SoftwareConfig = Field(default_factory=SoftwareConfig)
     env: EnvConfig = Field(default_factory=EnvConfig)
+    tasks: List[str] = Field(default_factory=list)
+    departments: List[str] = Field(default_factory=list)
     resolution: List[int] = Field(default=[1920, 1080])
     framerate: float = 24.0
 
