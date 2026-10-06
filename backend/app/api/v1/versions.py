@@ -34,7 +34,7 @@ def create_version(payload: VersionCreate, db: Session = Depends(get_db)):
     if asset is None:
         raise HTTPException(status_code=400, detail="Asset does not exist")
 
-    # Determine next version number for this asset
+    # Determine next version number for this version
     latest = (
         db.query(Version)
         .filter(Version.asset_id == payload.asset_id)

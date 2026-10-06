@@ -56,11 +56,11 @@ class LoginDialog(QDialog):
             self.error_label.setText("Please enter username and password.")
             return
 
-        # try:
-        #     BackendService.login(username, password)
-        # except Exception as e:
-        #     self.error_label.setText("Login failed. Check username/password.")
-        #     print(f"Login error: {e}")
-        #     return
+        try:
+            BackendService.login(username, password)
+        except Exception as e:
+            self.error_label.setText("Login failed. Check username/password.")
+            print(f"Login error: {e}")
+            return
 
         self.accept()

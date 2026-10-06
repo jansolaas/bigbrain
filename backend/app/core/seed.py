@@ -9,7 +9,7 @@ from app.models import (
     TaskType, DepartmentType,
     TaskStatus,
     User,
-    Version,
+    Version, VersionType,
     Software,
 )
 
@@ -172,14 +172,18 @@ def seed_dev_data(db: Session) -> None:
         shot_duration=100,
     )
 
-    # # 4. Version for first Film asset
-    # hero_v1 = Version(
-    #     asset_id=film_assets[0].id,
-    #     version_number=1,
-    #     file_path="/mnt/projects/BBF/assets/character/Righeous/v001/righeous.ma",
-    #     comment="Initial model publish",
-    # )
-    # db.add(hero_v1)
+
+    # Create a new Version row
+    film_asset_version = Version(
+        id=film_assets[0].id,
+        department=DepartmentType.MODELING.value,  # "modeling"
+        task=TaskType.MODELING.value,  # "modeling"
+        file_path="/mnt/projects/BBF/assets/character/Righeous/v001/righeous.ma",
+        comment="Initial model publish",
+        version_type=VersionType.IMAGE_STACK,  # Use VersionType.YOUR_TYPE if different
+    )
+
+    db.add(film_asset_version)
     #
     # # 5. Task for first Film asset
     # model_task = Task(

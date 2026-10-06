@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
 )
 
 from frontend.services.backed_service import BackendService
-
+from frontend.views.login_dialog import LoginDialog
 
 # Import the logging configuration (this will execute the config setup)
 # Create a logger for the dashboard module
@@ -57,7 +57,7 @@ class Dashboard(QMainWindow):
 
         self.load_projects()
 
-        self.apply_user_permissions()
+        # self.apply_user_permissions()
 
     def add_menu_bar(self):
         """
@@ -268,53 +268,14 @@ class Dashboard(QMainWindow):
         """
         Placeholder for future create/edit/delete project dialog.
         """
-        self.statusBar().showMessage("Project manager is not built yet.")
 
-    # def populate_assets_tree(self, assets):
-    #     """
-    #     Populate the QTreeView with asset data from the backend.
-    #
-    #     Expects `assets` to be a list of dictionaries, for example:
-    #     {
-    #         "id": 1,
-    #         "project_id": 1,
-    #         "project_name": "Big Brain Feature",
-    #         "name": "HeroCharacter",
-    #         "type": "character"
-    #     }
-    #     """
-    #     model = QStandardItemModel()
-    #     model.setHorizontalHeaderLabels(["Assets"])
-    #
-    #     root = model.invisibleRootItem()
-    #
-    #     def add_items(parent, items):
-    #         for item in items:
-    #             name = item.get("name", "Unnamed Asset")
-    #             asset_type = item.get("type")
-    #
-    #             if asset_type:
-    #                 label = f"{name} ({asset_type})"
-    #             else:
-    #                 label = name
-    #
-    #             tree_item = QStandardItem(label)
-    #
-    #             # Store useful backend data on the item for later use
-    #             tree_item.setData(item.get("id"), Qt.UserRole)
-    #             tree_item.setData(item, Qt.UserRole + 1)
-    #
-    #             parent.appendRow(tree_item)
-    #
-    #             # Safe for both flat lists and nested tree-style data
-    #             children = item.get("children", [])
-    #             if children:
-    #                 add_items(tree_item, children)
-    #
-    #     if isinstance(assets, list):
-    #         add_items(root, assets)
-    #
-    #     return model
+        login_dialog = LoginDialog()
+
+        if login_dialog.exec() == LoginDialog.Accepted:
+
+            self.statusBar().showMessage("Project manager is not built yet.")
+        else:
+            self.statusBar().showMessage("Wrong credentials manager cancelled.")
 
     def populate_assets_tree(self, assets):
         """

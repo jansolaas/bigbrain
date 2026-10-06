@@ -3,7 +3,8 @@ from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, Enum
 from sqlalchemy.sql import func
 from app.database import Base
 from app.models.projects import Project
-
+from app.models.departments import DepartmentType
+from app.models.tasks import TaskType, TaskStatus
 
 class VersionType(enum.Enum):
     IMAGE_STACK = "image_stack"
@@ -14,12 +15,13 @@ class VersionType(enum.Enum):
     USDA = "usda"
 
 class VersionDepartments(enum.Enum):
-    departments = Project.config.departments
+    departments = Column(Enum(DepartmentType), nullable=False)
 
 class VersionTasks(enum.Enum):
-    tasks = Project.config.tasks
+    tasks = Column(Enum(TaskType), nullable=False)
 
-
+class VersionStatus(enum.Enum):
+    status = Column(Enum(TaskStatus), nullable=False)
 
 class Version(Base):
     __tablename__ = "versions"
