@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Text, Boolean, Float, JSON
-from app.database import Base
+from backend.app.database import Base
 
 
 class Project(Base):
@@ -13,4 +13,3 @@ class Project(Base):
     fps = Column(Float, nullable=True)
     config = Column(JSON, nullable=True)
     is_active = Column(Boolean, default=True)
-

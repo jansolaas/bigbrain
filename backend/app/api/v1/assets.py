@@ -3,9 +3,9 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_db
-from app.models import Asset, Project
-from app.schemas.asset import AssetOut, AssetCreate
+from backend.app.api.deps import get_db
+from backend.app.models import Asset, Project
+from backend.app.schemas.asset import AssetOut, AssetCreate
 
 router = APIRouter(prefix="/assets", tags=["assets"])
 

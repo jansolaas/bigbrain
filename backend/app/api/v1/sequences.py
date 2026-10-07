@@ -3,9 +3,9 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_db
-from app.models import Sequence, Project, Episode
-from app.schemas.sequence import SequenceOut, SequenceCreate
+from backend.app.api.deps import get_db
+from backend.app.models import Sequence, Project, Episode
+from backend.app.schemas.sequence import SequenceOut, SequenceCreate
 
 router = APIRouter(prefix="/sequences", tags=["sequences"])
 

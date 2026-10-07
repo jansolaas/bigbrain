@@ -2,7 +2,7 @@ from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
 # Import Enums from models so we share the definition
-from app.models.departments import DepartmentType
+from backend.app.models.departments import DepartmentType
 
 
 class DepartmentBase(BaseModel):

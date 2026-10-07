@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from app.models import Shot, Project
+from backend.app.models import Shot, Project
 
 
 def resolve_fps_for_shot(db: Session, shot_id: int) -> float:

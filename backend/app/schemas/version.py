@@ -3,7 +3,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
 
-from app.models.versions import VersionType
+from backend.app.models.versions import VersionType
 
 class VersionBase(BaseModel):
     asset_id: int

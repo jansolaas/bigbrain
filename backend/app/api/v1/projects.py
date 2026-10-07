@@ -3,12 +3,12 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_db
-from app.models import Project
-from app.schemas.project import ProjectOut, ProjectCreate
+from backend.app.api.deps import get_db
+from backend.app.models import Project
+from backend.app.schemas.project import ProjectOut, ProjectCreate
 
-from app.api.deps import get_current_admin_user # Import dependency
-from app.models import User # Import model for type hint
+from backend.app.api.deps import get_current_admin_user # Import dependency
+from backend.app.models import User # Import model for type hint
 
 router = APIRouter(prefix="/projects", tags=["projects"])
 

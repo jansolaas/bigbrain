@@ -1,5 +1,5 @@
 import os
-from app.models import Project, Sequence, Shot
+from backend.app.models import Project, Sequence, Shot
 
 
 def ensure_folder(path: str):

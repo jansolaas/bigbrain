@@ -1,8 +1,9 @@
-from app.api.v1 import router as api_v1_router
-from app.database import Base, engine, SessionLocal
+from backend.app.api.v1 import router as api_v1_router
+
+from backend.app.database import Base, engine, SessionLocal
 from fastapi import FastAPI
 
-from app.core.seed import seed_dev_data
+from backend.app.core.seed import seed_dev_data
 
 # Import models so that Base knows about them before create_all
 

@@ -2,10 +2,10 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_db
-from app.core.security import get_password_hash
-from app.models import User
-from app.schemas.user import UserOut, UserCreate
+from backend.app.api.deps import get_db
+from backend.app.core.security import get_password_hash
+from backend.app.models import User
+from backend.app.schemas.user import UserOut, UserCreate
 
 router = APIRouter(prefix="/users", tags=["users"])
 

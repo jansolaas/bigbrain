@@ -2,7 +2,7 @@ from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
 # Import Enums from models so we share the definition
-from app.models.tasks import TaskType, TaskStatus
+from backend.app.models.tasks import TaskType, TaskStatus
 
 
 class TaskBase(BaseModel):

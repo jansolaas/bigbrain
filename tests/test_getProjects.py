@@ -1,30 +1,14 @@
-from dotenv import load_dotenv
-import os
-import requests
+def test_get_projects(test_client):
+    url = "/api/v1/projects"
+    headers = {
+        "Authorization": "Bearer dummy_access_token"
+    }
 
-from pprint import pprint
+    response = test_client.get(url, headers=headers)
+    assert response.status_code == 200
+    response_data = response.json()
 
-# Load environment variables from .env
-load_dotenv()
-
-# Get the port from the environment variable, with a fallback default
-port = os.getenv("BACKEND_PORT", "8000")
-
-# Dynamically build the URL
-url = f"http://127.0.0.1:{port}/api/v1/projects"
-
-# Example: Token from login (if required)
-access_token = "your_access_token_here"  # Replace with your token from test_login.py
-
-# Set headers if authentication is required
-headers = {
-    "Authorization": f"Bearer {access_token}"
-}
-
-# Make GET request to fetch all shots
-response = requests.get(url, headers=headers)
-
-print(f"Status Code: {response.status_code}")
-print("Response JSON:")
-
-pprint(response.json(), indent=4)
+    assert isinstance(response_data, list)
+    if response_data:
+        assert "id" in response_data[0]
+        assert "name" in response_data[0]

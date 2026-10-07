@@ -2,9 +2,9 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_db
-from app.models import Department, Task, Asset, Shot, User
-from app.schemas.department import DepartmentOut, DepartmentCreate
+from backend.app.api.deps import get_db
+from backend.app.models import Department, Task, Asset, Shot, User
+from backend.app.schemas.department import DepartmentOut, DepartmentCreate
 
 router = APIRouter(prefix="/departments", tags=["departments"])
 

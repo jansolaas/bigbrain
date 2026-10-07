@@ -2,9 +2,9 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_db
-from app.models import Software
-from app.schemas.software import SoftwareOut, SoftwareCreate
+from backend.app.api.deps import get_db
+from backend.app.models import Software
+from backend.app.schemas.software import SoftwareOut, SoftwareCreate
 
 router = APIRouter(prefix="/software", tags=["software"])
 

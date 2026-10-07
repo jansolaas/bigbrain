@@ -1,10 +1,10 @@
 import enum
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, Enum
 from sqlalchemy.sql import func
-from app.database import Base
-from app.models.projects import Project
-from app.models.departments import DepartmentType
-from app.models.tasks import TaskType, TaskStatus
+from backend.app.database import Base
+from backend.app.models.projects import Project
+from backend.app.models.departments import DepartmentType
+from backend.app.models.tasks import TaskType, TaskStatus
 
 class VersionType(enum.Enum):
     IMAGE_STACK = "image_stack"

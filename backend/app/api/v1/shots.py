@@ -3,12 +3,12 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_db
-from app.models import Shot, Project
-from app.schemas.shot import ShotOut, ShotCreate, ShotUpdate
-from app.models import Sequence
-from app.core.fps import resolve_fps_for_shot
-from app.core.paths import create_shot_structure
+from backend.app.api.deps import get_db
+from backend.app.models import Shot, Project
+from backend.app.schemas.shot import ShotOut, ShotCreate, ShotUpdate
+from backend.app.models import Sequence
+from backend.app.core.fps import resolve_fps_for_shot
+from backend.app.core.paths import create_shot_structure
 
 
 router = APIRouter(prefix="/shots", tags=["shots"])

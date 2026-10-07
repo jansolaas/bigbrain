@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from app.core.security import get_password_hash
-from app.models import (
+from backend.app.core.security import get_password_hash
+from backend.app.models import (
     Project,
     Shot,
     Sequence,
@@ -165,25 +165,34 @@ def seed_dev_data(db: Session) -> None:
         ],
     )
 
-    film_shots = create_sequences_and_shots(
+    create_sequences_and_shots(
         film,
         sequence_names=["SQ010", "SQ020", "SQ030"],
         shots_per_sequence=4,
         shot_duration=100,
     )
 
+    # print("printing stuff")
+    # print(film_assets)
+    # print(film_assets[0].id)
+    # print(film_assets[0].name)
+    # print("---------------")
 
     # Create a new Version row
-    film_asset_version = Version(
-        id=film_assets[0].id,
-        department=DepartmentType.MODELING.value,  # "modeling"
-        task=TaskType.MODELING.value,  # "modeling"
-        file_path="/mnt/projects/BBF/assets/character/Righeous/v001/righeous.ma",
-        comment="Initial model publish",
-        version_type=VersionType.IMAGE_STACK,  # Use VersionType.YOUR_TYPE if different
-    )
+    # film_asset_version = Version(
+    #     id=film_assets[0].id,
+    #     department=DepartmentType.MODELING.value,  # "modeling"
+    #     task=TaskType.MODELING.value,  # "modeling"
+    #     file_path="/mnt/projects/BBF/assets/character/Righeous/v001/righeous.ma",
+    #     comment="Initial model publish",
+    #     version_type=VersionType.IMAGE_STACK,  # Use VersionType.YOUR_TYPE if different
+    #     version_number=1,
+    #
+    # )
 
-    db.add(film_asset_version)
+
+
+    # db.add(film_asset_version)
     #
     # # 5. Task for first Film asset
     # model_task = Task(
